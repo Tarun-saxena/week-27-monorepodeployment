@@ -32,6 +32,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /home/ubuntu/todo-app/
+            cd /home/ubuntu/week-27-monorepodeployment
             docker compose -f ./docker-compose.yml pull app
             docker compose -f ./docker-compose.yml up -d  app

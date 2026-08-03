@@ -1,5 +1,5 @@
 {
-  "name": "turborepo-prisma-starter",
+  "name": "week-27-monorepodeployment",
   "private": true,
   "scripts": {
     "build": "turbo run build",

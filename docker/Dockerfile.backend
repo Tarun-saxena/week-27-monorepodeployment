@@ -1,0 +1,23 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+COPY /packages/db/package*.json ./packages/db/
+COPY /apps/http-server/package*.json ./apps/http-server/
+
+RUN npm install
+
+COPY /packages/db  ./packages/db
+COPY /apps/http-server ./apps/http-server
+
+RUN npx prisma generate --schema ./packages/db/prisma/schema.prisma
+
+RUN npm run build --workspace=@repo/db
+RUN npm run build --workspace=http-server
+
+EXPOSE 3001
+
+CMD [ "sh", "-c", "npx prisma migrate deploy && npm run start --workspace=http-server"]
+

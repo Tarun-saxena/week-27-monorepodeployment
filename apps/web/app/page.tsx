@@ -75,7 +75,7 @@ export default function Home() {
         fontFamily: "sans-serif",
       }}
     >
-      <h1>Monorepo Todo Demo</h1>
+      <h1>Monorepo Todo </h1>
 
       <h2>Server Time</h2>
 

@@ -24,6 +24,9 @@ jobs:
           file: ./docker/Dockerfile.frontend
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/todo-app-frontend:latest
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_WS_URL=${{ secrets.NEXT_PUBLIC_WS_URL }}
 
       - name: Deploy to VM
         uses: appleboy/ssh-action@v1.0.3

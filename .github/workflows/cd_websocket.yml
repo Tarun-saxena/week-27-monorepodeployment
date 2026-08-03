@@ -1,0 +1,42 @@
+# build docker image
+# push docker image to docker hub
+# ssh into vm nd start new image
+
+name: Continuous Deployment Websocket
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Websocket Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile.websocket
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/todo-app-websocket:latest
+
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/todo-app/
+            docker compose -f ./docker-compose.yml pull websocket
+            docker compose -f ./docker-compose.yml up -d  websocket

@@ -10,10 +10,14 @@ COPY apps/websocket/package*.json ./apps/websocket/
 
 RUN npm install
 
+COPY packages/db ./packages/db
 COPY ./apps/websocket ./apps/websocket
 
+RUN npx prisma generate --schema ./packages/db/prisma/schema.prisma
+
+RUN npm run build --workspace=@repo/db
 RUN npm run build --workspace=websocket
 
 EXPOSE 3002
 
-CMD ["npm", "run", "start", "--workspace=websocket"]
+CMD [ "sh", "-c", "cd packages/db && npx prisma migrate deploy && cd ../.. && npm run start --workspace=websocket"]

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+
 type Todo = {
   id: string;
   title: string;
@@ -15,7 +16,7 @@ export default function Home() {
 
   async function fetchTodos() {
     try {
-      const res = await fetch("http://localhost:3001/todos");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/todos`);
       const data = await res.json();
       setTodos(data);
     } catch (err) {
@@ -26,7 +27,7 @@ export default function Home() {
   async function createTodo() {
     if (!title.trim()) return;
 
-    await fetch("http://localhost:3001/todos", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/todos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +44,7 @@ export default function Home() {
   useEffect(() => {
     fetchTodos();
 
-    const ws = new WebSocket("ws://localhost:3002");
+    const ws = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     ws.onopen = () => {
       console.log("Connected to WebSocket");
